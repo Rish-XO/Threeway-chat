@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -31,13 +33,18 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const body = {
+        email: data.get("email"),
+        password: data.get("password"),
+      };
+      try {
+        const response = await axios.post("http://localhost:5000/login", body);
+      } catch (error) {
+        
+      }
   };
 
   return (
@@ -98,9 +105,9 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <NavLink to="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>

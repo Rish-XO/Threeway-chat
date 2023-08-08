@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Grid, Typography } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 const styles = {
   root: {
@@ -25,12 +26,16 @@ function Home() {
           Threeway Trade Chat
         </Typography>
         <Grid container justifyContent="center">
-          <Button variant="contained" color="primary" style={styles.button}>
-            Signup
-          </Button>
-          <Button variant="contained" color="secondary" style={styles.button}>
-            Login
-          </Button>
+          <NavLink to="/signup">
+            <Button variant="contained" color="primary" style={styles.button}>
+              Signup
+            </Button>
+          </NavLink>
+          <NavLink to= "/login">
+            <Button variant="contained" color="secondary" style={styles.button}>
+              Login
+            </Button>
+          </NavLink>
         </Grid>
       </Container>
     </div>
