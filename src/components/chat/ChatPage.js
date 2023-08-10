@@ -3,18 +3,59 @@ import { Container, Grid, Paper, TextField, Button } from "@mui/material";
 import "./ChatPage.css";
 import { SocketContext } from "../../utils/socket/chatContext";
 import { NavLink, useParams } from "react-router-dom";
+import socket from "../../utils/socket/socket";
+import axios from "axios";
 
 function ChatPage() {
-  const { roomID } = useParams();
-  const [messageInput, setMessageInput] = useState("");
+  const { orderID } = useParams();
+  const [message, setMessage] = useState("");
   const { messages, setMessages } = useContext(SocketContext);
+  const userID = localStorage.getItem("userID");
+  const role = localStorage.getItem("role");
 
-  const handleSend = () => {
+  useEffect(() => {
+    socket.emit("joinRoom", { orderID });
+  }, [orderID]);
+
+  const handleSend = async () => {
+    console.log("current message is", message);
+    socket.emit("chatMessage", { orderID, message });
+
+    try {
+      await axios.post("http://localhost:5000/saveMessage", {
+        message,
+        orderID,
+        userID,
+        role,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+    setMessage("");
   };
+
+  // chat details fetching
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/getMessages/${orderID}`
+        );
+        console.log(response.data);
+        setMessages(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    if (orderID) {
+      getChats();
+    }
+  }, [orderID, setMessages]);
+  
 
   return (
     <Container>
-      <NavLink to= "/dashboard">
+      <NavLink to="/dashboard">
         <Button>HOME</Button>
       </NavLink>
       <Grid
@@ -51,8 +92,8 @@ function ChatPage() {
             <TextField
               fullWidth
               variant="outlined"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             />
             <Button
               variant="contained"

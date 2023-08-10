@@ -54,7 +54,7 @@ function DashBoard() {
           <Grid item xs={12} md={7}>
             {orders.length > 0 ? (
               orders.map((item) => (
-                <Paper sx={{ margin: "10px", padding: "20px" }} onClick={() => orderClickHandler(item.room_id)}>
+                <Paper key={item.post_id} sx={{ margin: "10px", padding: "20px" }} onClick={() => orderClickHandler(item.post_id)}>
                   {item.post_id}
                 </Paper>
               ))
