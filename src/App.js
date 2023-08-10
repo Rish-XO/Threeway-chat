@@ -4,7 +4,9 @@ import Root from "./components/Root";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
-
+import DashBoard from "./components/DashBoard";
+import MInputForm from "./components/ManufacturerInput";
+import ChatPage from "./components/chat/ChatPage";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +16,9 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "signup", element: <SignUp /> },
       { path: "login", element: <Login /> },
-
+      { path: "dashboard", element: <DashBoard /> },
+      { path: "newMessage", element: <MInputForm /> },
+      { path: "chat/:roomID", element: <ChatPage /> },
     ],
   },
 ]);

@@ -1,0 +1,7 @@
+.chat-content {
+    padding: 16px;
+    border: 1px solid black;
+    height: 550px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }

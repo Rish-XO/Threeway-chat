@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "authentication",
   initialState: {
-    isLoggedIn: true,
+    isLoggedIn: false,
     role: null,
     isVerified: true,
     user_id: null,
@@ -20,6 +20,8 @@ const authSlice = createSlice({
       state.isVerified = true;
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role)
+      localStorage.setItem("isLoggedIn", true)
+      localStorage.setItem('userID' , data.id)
     },
     verifyHandler(state, action) {
       const data = action.payload;
@@ -38,6 +40,8 @@ const authSlice = createSlice({
       state.user_id = null;
       localStorage.removeItem("token");
       localStorage.removeItem("role");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("userID");
     },
   },
 });

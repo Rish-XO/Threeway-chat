@@ -14,7 +14,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { MenuItem } from "@mui/material";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginHandler } from "../utils/store/authSlice";
 
 function Copyright(props) {
   return (
@@ -39,6 +41,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -47,15 +51,30 @@ export default function SignUp() {
       password: data.get("password"),
       address: data.get("address"),
       userType: data.get("userType"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
     };
     console.log(userDetails);
     try {
-    const response = await axios.post("http://localhost:5000/signup", userDetails);
-    console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:5000/signup",
+        userDetails
+      );
+      console.log(response.data);
+      const { token, role, id } = response.data;
+      dispatch(loginHandler({ token, role, id }));
+      navigate("/dashboard");
     } catch (error) {
-        console.log(error.message);
+      console.log(error.message);
     }
   };
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
