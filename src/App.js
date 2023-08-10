@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import DashBoard from "./components/DashBoard";
 import MInputForm from "./components/ManufacturerInput";
 import ChatPage from "./components/chat/ChatPage";
+import SearchPage from "./components/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashBoard /> },
       { path: "newMessage", element: <MInputForm /> },
       { path: "chat/:orderID", element: <ChatPage /> },
+      {path: "search", element: <SearchPage />}
     ],
   },
 ]);

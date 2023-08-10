@@ -11,11 +11,11 @@ function DashBoard() {
   const user = localStorage.getItem("userID");
   //   console.log("the current User is " , user);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!isLoggedIn) {
-        navigate("/login");
-      }
-  },[isLoggedIn, navigate])
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     const getRooms = async () => {
@@ -23,7 +23,7 @@ function DashBoard() {
         const response = await axios.post("http://localhost:5000/getRooms", {
           user,
         });
-        const orderDetails = response.data.orders
+        const orderDetails = response.data.orders;
         console.log("all rooms orders", orderDetails);
         setOrders(orderDetails);
       } catch (error) {
@@ -34,8 +34,8 @@ function DashBoard() {
   }, [user]);
 
   const orderClickHandler = (id) => {
-    navigate(`/chat/${id}`)
-  }
+    navigate(`/chat/${id}`);
+  };
 
   return (
     <Fragment>
@@ -44,6 +44,9 @@ function DashBoard() {
       <Container>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h4"> Your Messages</Typography>
+          <NavLink to="/search">
+            <Button sx={{ marginLeft: "30px" }}>Search</Button>
+          </NavLink>
           <div style={{ marginLeft: "auto" }}>
             <NavLink to="/newMessage">
               <Button variant="contained">New message</Button>
@@ -54,7 +57,11 @@ function DashBoard() {
           <Grid item xs={12} md={7}>
             {orders.length > 0 ? (
               orders.map((item) => (
-                <Paper key={item.post_id} sx={{ margin: "10px", padding: "20px" }} onClick={() => orderClickHandler(item.post_id)}>
+                <Paper
+                  key={item.post_id}
+                  sx={{ margin: "10px", padding: "20px" }}
+                  onClick={() => orderClickHandler(item.post_id)}
+                >
                   {item.post_id}
                 </Paper>
               ))
