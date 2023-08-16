@@ -9,6 +9,7 @@ function DashBoard() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const user = localStorage.getItem("userID");
+  const role = localStorage.getItem("role");
   //   console.log("the current User is " , user);
 
   useEffect(() => {
@@ -47,11 +48,13 @@ function DashBoard() {
           <NavLink to="/search">
             <Button sx={{ marginLeft: "30px" }}>Search</Button>
           </NavLink>
-          <div style={{ marginLeft: "auto" }}>
-            <NavLink to="/newMessage">
-              <Button variant="contained">New message</Button>
-            </NavLink>
-          </div>
+          {role === "manufacturer" && (
+            <div style={{ marginLeft: "auto" }}>
+              <NavLink to="/newMessage">
+                <Button variant="contained">New message</Button>
+              </NavLink>
+            </div>
+          )}
         </Box>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={7}>

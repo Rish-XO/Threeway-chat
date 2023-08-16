@@ -1,26 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Container,
   Grid,
   Paper,
-  Typography,
   TextField,
-} from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SearchPage() {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchType, setSearchType] = useState("orderID");
+  const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const currentUser = localStorage.getItem("userID");
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/searchRooms', {
-        searchType: 'orderID',
+      const response = await axios.post("http://localhost:5000/searchRooms", {
+        searchType: searchType,
         searchValue: searchValue,
+        currenUser: currentUser,
       });
       setSearchResults(response.data.orders);
     } catch (error) {
@@ -30,34 +36,53 @@ function SearchPage() {
 
   return (
     <Container>
-      <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+      <Box sx={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
+        <FormControl sx={{ marginRight: "20px" }}>
+          <InputLabel>Search By</InputLabel>
+          <Select
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+          >
+            <MenuItem value="orderID">Order ID</MenuItem>
+            <MenuItem value="from">From</MenuItem>
+            <MenuItem value="to">To</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
-          label="Search by Order ID"
+          label={`Search by ${
+            searchType === "orderID" ? "Order ID" : searchType
+          }`}
           variant="outlined"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <Button variant="contained" onClick={handleSearch}>
+        <Button
+          sx={{ marginLeft: "20px" }}
+          variant="contained"
+          onClick={handleSearch}
+        >
           Search
         </Button>
       </Box>
-      <Grid container justifyContent="center" style={{ marginTop: '20px' }}>
+      <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
         <Grid item xs={12} md={7}>
           {searchResults.length > 0 ? (
             searchResults.map((item) => (
               <Paper
                 key={item.post_id}
-                sx={{ margin: '10px', padding: '20px', cursor: 'pointer' }}
+                sx={{ margin: "10px", padding: "20px", cursor: "pointer" }}
                 onClick={() => {
                   // Handle navigation to the selected order's chat
-                  navigate(`/chat/${item.post_id}`)
+                  navigate(`/chat/${item.post_id}`);
                 }}
               >
                 {item.post_id}
               </Paper>
             ))
           ) : (
-            <Paper sx={{ margin: '10px', padding: '20px' }}>No orders found</Paper>
+            <Paper sx={{ margin: "10px", padding: "20px" }}>
+              No orders found
+            </Paper>
           )}
         </Grid>
       </Grid>
