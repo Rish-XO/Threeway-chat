@@ -22,11 +22,12 @@ function SearchPage() {
   const currentUser = localStorage.getItem("userID");
 
   const handleSearch = async () => {
+    // console.log(currentUser);
     try {
       const response = await axios.post("http://localhost:5000/searchRooms", {
         searchType: searchType,
         searchValue: searchValue,
-        currenUser: currentUser,
+        currentUser: currentUser,
       });
       setSearchResults(response.data.orders);
     } catch (error) {
@@ -69,14 +70,14 @@ function SearchPage() {
           {searchResults.length > 0 ? (
             searchResults.map((item) => (
               <Paper
-                key={item.post_id}
+                key={item.order_id}
                 sx={{ margin: "10px", padding: "20px", cursor: "pointer" }}
                 onClick={() => {
                   // Handle navigation to the selected order's chat
-                  navigate(`/chat/${item.post_id}`);
+                  navigate(`/chat/${item.order_id}`);
                 }}
               >
-                {item.post_id}
+                {item.order_id}
               </Paper>
             ))
           ) : (
